@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.cg.hcms.appointment.entities.Appointment;
@@ -16,6 +17,7 @@ import com.cg.hcms.appointment.repository.AppointmentRepo;
 @Service
 public class AppointmentServiceImpl implements AppointmentService{
 	
+	@Autowired
 	private AppointmentRepo appointmentRepo;
 
 	@Override
@@ -23,11 +25,13 @@ public class AppointmentServiceImpl implements AppointmentService{
 		
 		LocalTime time=appointment.getDateTime().toLocalTime();
 
-	    if (appointment.getDateTime().isBefore(LocalDateTime.now().plusHours(3))||appointment.getDateTime().isAfter(LocalDateTime.now().plusDays(10))
-	    	||time.isBefore(LocalTime.of(7, 59))||time.isAfter(LocalTime.of(20, 00))) 
-	    {
-			throw new SlotNotAvailableException("This slot is not available");
-		}
+		if ((appointmentRepo.getAppointmentByDateTimeAndTestId(appointment.getDateTime(), appointment.getTestId())!=null)
+			||appointment.getDateTime().isBefore(LocalDateTime.now().plusHours(3))||
+			appointment.getDateTime().isAfter(LocalDateTime.now().plusDays(10))
+			||time.isBefore(LocalTime.of(7, 59))||time.isAfter(LocalTime.of(20, 00))) {
+					throw new SlotNotAvailableException("This slot is not available"); 
+					}
+		 
 		return appointmentRepo.save(appointment);
 	}
 
