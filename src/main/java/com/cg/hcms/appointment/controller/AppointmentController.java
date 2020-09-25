@@ -1,9 +1,9 @@
 package com.cg.hcms.appointment.controller;
 
 import java.math.BigInteger;
-import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -24,30 +24,30 @@ public class AppointmentController {
 	AppointmentService service;
 
 	@PostMapping("/makeappointment")
-	public Appointment makeAppointment(@RequestBody Appointment appointment) {
-		return service.makeAppointment(appointment);
+	public ResponseEntity<?> makeAppointment(@RequestBody Appointment appointment) {
+		return ResponseEntity.ok(service.makeAppointment(appointment));
 	}
 	
 	@GetMapping("/getappointment/{appointmentId}")
-	public Appointment getAppointment(@PathVariable BigInteger appointmentId) {
-		return service.getAppointment(appointmentId);
+	public ResponseEntity<?> getAppointment(@PathVariable BigInteger appointmentId) {
+		return ResponseEntity.ok(service.getAppointment(appointmentId));
 	}
 	
 	@GetMapping("/getallappointments")
-	public List<Appointment> getAllAppointment() {
-		return service.getAllAppointments();
+	public ResponseEntity<?> getAllAppointment() {
+		return ResponseEntity.ok(service.getAllAppointments());
 	}
 	
 	@DeleteMapping("/removeappointment-centerid/{appointmentId}")
-	public boolean removeAppointment(@PathVariable BigInteger appointmentId)
+	public ResponseEntity<?> removeAppointment(@PathVariable BigInteger appointmentId)
 	{
-		return  service.removeAppointmentById(appointmentId);
+		return  ResponseEntity.ok(service.removeAppointmentById(appointmentId));
 	}
 	
 	@PutMapping("/approveappointment/{appointmentId}/{status}")
-	public Appointment approveAppoinment(@PathVariable BigInteger appointmentId, @PathVariable boolean status) {
+	public ResponseEntity<?> approveAppoinment(@PathVariable BigInteger appointmentId, @PathVariable boolean status) {
 		Appointment appointment = service.getAppointment(appointmentId);
-		return service.approveAppointment(appointment, status);
+		return ResponseEntity.ok(service.approveAppointment(appointment, status));
 	}
 	
 	
