@@ -18,10 +18,10 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
 
-import com.cg.hcms.appointment.entities.Appointment;
 import com.cg.hcms.appointment.exception.AppointmentAlreadyApprovedException;
 import com.cg.hcms.appointment.exception.AppointmentNotFoundException;
 import com.cg.hcms.appointment.exception.SlotNotAvailableException;
+import com.cg.hcms.appointment.model.AppointmentModel;
 import com.cg.hcms.appointment.repository.AppointmentRepo;
 
 @ExtendWith(MockitoExtension.class)
@@ -34,33 +34,33 @@ public class AppointmentServiceTest {
 	@Mock
 	AppointmentRepo appointmentRepoMock;
 	
-	private static Appointment appointment;
-	private static Appointment appointment1;
-	private static Appointment appointment2;
-	private static Appointment appointment3;
-	private static Appointment appointmentSecond;
-	private static Appointment appointmentThird;
-	private static List<Appointment> appointmentList = new ArrayList<>();
+	private static AppointmentModel appointment;
+	private static AppointmentModel appointment1;
+	private static AppointmentModel appointment2;
+	private static AppointmentModel appointment3;
+	private static AppointmentModel appointmentSecond;
+	private static AppointmentModel appointmentThird;
+	private static List<AppointmentModel> appointmentList = new ArrayList<>();
 	
 	
 	@BeforeEach
 	public void init() {
 
-		appointment = new Appointment("121", BigInteger.valueOf(0), "23", LocalDateTime.of(2020,9 , 27	, 9, 30), false);
-		appointmentSecond = new Appointment("120", BigInteger.valueOf(17), "22", LocalDateTime.of(2020,9 , 28, 9, 30), false);
-		appointmentThird = new Appointment("122", BigInteger.valueOf(16), "24", LocalDateTime.of(2020,10 , 3, 9, 30), true);
-		appointment1=new Appointment("230", BigInteger.valueOf(25), "13", LocalDateTime.of(2020, 10, 3, 5, 30), false);
-		appointment2=new Appointment("231", BigInteger.valueOf(26) , "14", LocalDateTime.of(2020,10 , 15, 11, 30), false);
-		appointment3= new Appointment("232", BigInteger.valueOf(5) , "15", LocalDateTime.now().plusHours(2), false);
+		appointment = new AppointmentModel("121", BigInteger.valueOf(15), "23", LocalDateTime.of(2020,9 , 27	, 9, 30), false);
+		appointmentSecond = new AppointmentModel("120", BigInteger.valueOf(17), "22", LocalDateTime.of(2020,9 , 28, 9, 30), false);
+		appointmentThird = new AppointmentModel("122", BigInteger.valueOf(16), "24", LocalDateTime.of(2020,10 , 3, 9, 30), true);
+		appointment1=new AppointmentModel("230", BigInteger.valueOf(25), "13", LocalDateTime.of(2020, 10, 3, 5, 30), false);
+		appointment2=new AppointmentModel("231", BigInteger.valueOf(26) , "14", LocalDateTime.of(2020,10 , 15, 11, 30), false);
+		appointment3= new AppointmentModel("232", BigInteger.valueOf(5) , "15", LocalDateTime.now().plusHours(2), false);
 	
 	}
 	
 	
 	@Test()
 	public void slotNotAvailableExceptionTest() {
-		Mockito.when(appointmentRepoMock.save(appointment1)).thenThrow(new SlotNotAvailableException("Error:Enter time between 08:00 to 17:00"));
-		Mockito.when(appointmentRepoMock.save(appointment2)).thenThrow(new SlotNotAvailableException("Error:Cannot make appointment, choose a date closer to current date"));
-		Mockito.when(appointmentRepoMock.save(appointment3)).thenThrow(new SlotNotAvailableException("Error:Cannot make appointment, choose a date closer to current date"));
+		Mockito.when(appointmentRepoMock.save(AppointmentModel.toEntity(appointment1))).thenThrow(new SlotNotAvailableException("Error:Enter time between 08:00 to 17:00"));
+		Mockito.when(appointmentRepoMock.save(AppointmentModel.toEntity(appointment2))).thenThrow(new SlotNotAvailableException("Error:Cannot make appointment, choose a date closer to current date"));
+		Mockito.when(appointmentRepoMock.save(AppointmentModel.toEntity(appointment3))).thenThrow(new SlotNotAvailableException("Error:Cannot make appointment, choose a date closer to current date"));
 
 		assertThrows(SlotNotAvailableException.class, () -> {appointmentServiceMock.makeAppointment(appointment1);});
 		assertThrows(SlotNotAvailableException.class, () -> {appointmentServiceMock.makeAppointment(appointment2);});
@@ -70,8 +70,8 @@ public class AppointmentServiceTest {
 	
 	@Test
 	public void makeAppointmentTest() {
-		Mockito.when(appointmentRepoMock.save(appointment)).thenReturn(appointment);
-		assertEquals(appointment, appointmentServiceMock.makeAppointment(appointment));
+		Mockito.when(appointmentRepoMock.save(AppointmentModel.toEntity(appointment))).thenReturn(AppointmentModel.toEntity(appointment));
+		assertEquals(appointment.getAppointmentId(), appointmentServiceMock.makeAppointment(appointment).getAppointmentId());
 	}
 	
 	@Test
@@ -86,7 +86,7 @@ public class AppointmentServiceTest {
 		
 		appointmentList.add(appointment);
 		appointmentList.add(appointmentSecond);
-		Mockito.when(appointmentRepoMock.findAll()).thenReturn(appointmentList);
+//		Mockito.when(appointmentRepoMock.findAll()).thenReturn(appointmentList);
 			
 		assertEquals(2, appointmentServiceMock.getAllAppointments().size());
 	}

@@ -13,7 +13,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 @Entity
 @Table(name="appointment_info")
-public class Appointment {
+public class AppointmentEntity {
 	
 	private String userId;
 	
@@ -28,7 +28,7 @@ public class Appointment {
 	private boolean approved = false;
 	
 	
-	public Appointment() {
+	public AppointmentEntity() {
 		super();
 	}
 	
@@ -63,7 +63,7 @@ public class Appointment {
 		this.approved = approved;
 	}
 
-	public Appointment(String userId, BigInteger appointmentId, String testId, LocalDateTime dateTime,
+	public AppointmentEntity(String userId, BigInteger appointmentId, String testId, LocalDateTime dateTime,
 			boolean approved) {
 		super();
 		this.userId = userId;

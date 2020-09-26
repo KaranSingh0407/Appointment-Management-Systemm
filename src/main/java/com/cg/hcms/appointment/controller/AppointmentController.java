@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.cg.hcms.appointment.entities.Appointment;
+import com.cg.hcms.appointment.model.AppointmentModel;
 import com.cg.hcms.appointment.service.AppointmentService;
 
 @RestController
@@ -24,7 +24,7 @@ public class AppointmentController {
 	AppointmentService service;
 
 	@PostMapping("/makeappointment")
-	public ResponseEntity<?> makeAppointment(@RequestBody Appointment appointment) {
+	public ResponseEntity<?> makeAppointment(@RequestBody AppointmentModel appointment) {
 		return ResponseEntity.ok(service.makeAppointment(appointment));
 	}
 	
@@ -46,7 +46,7 @@ public class AppointmentController {
 	
 	@PutMapping("/approveappointment/{appointmentId}/{status}")
 	public ResponseEntity<?> approveAppoinment(@PathVariable BigInteger appointmentId, @PathVariable boolean status) {
-		Appointment appointment = service.getAppointment(appointmentId);
+		AppointmentModel appointment = service.getAppointment(appointmentId);
 		return ResponseEntity.ok(service.approveAppointment(appointment, status));
 	}
 	
