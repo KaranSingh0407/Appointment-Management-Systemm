@@ -16,12 +16,19 @@ import org.springframework.web.bind.annotation.RestController;
 import com.cg.hcms.appointment.model.AppointmentModel;
 import com.cg.hcms.appointment.service.AppointmentService;
 
+/*******************************************************************************************************************************
+-Author                   :     Karan Singh Bisht
+-Created/Modified Date    :     23-09-2020
+-Description              :     AppointmentController Class for accessing Appointment Management System services
+*******************************************************************************************************************************/
+
 @RestController
 @RequestMapping("/appointment")
 public class AppointmentController {
 	
 	@Autowired
 	AppointmentService service;
+	
 
 	@PostMapping("/makeappointment")
 	public ResponseEntity<?> makeAppointment(@RequestBody AppointmentModel appointment) {
@@ -38,7 +45,7 @@ public class AppointmentController {
 		return ResponseEntity.ok(service.getAllAppointments());
 	}
 	
-	@DeleteMapping("/removeappointment-centerid/{appointmentId}")
+	@DeleteMapping("/removeappointment/{appointmentId}")
 	public ResponseEntity<?> removeAppointment(@PathVariable BigInteger appointmentId)
 	{
 		return  ResponseEntity.ok(service.removeAppointmentById(appointmentId));

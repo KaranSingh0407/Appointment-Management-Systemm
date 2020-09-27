@@ -2,18 +2,29 @@ package com.cg.hcms.appointment.model;
 
 import java.math.BigInteger;
 import java.time.LocalDateTime;
+
 import org.springframework.format.annotation.DateTimeFormat;
 
-import com.cg.hcms.appointment.entities.AppointmentEntity;
+import com.cg.hcms.appointment.entity.AppointmentEntity;
+import com.cg.hcms.appointment.entity.DiagnosticCenterEntity;
+import com.cg.hcms.appointment.entity.DiagnosticTestEntity;
+import com.cg.hcms.appointment.entity.UserEntity;
+
+/*******************************************************************************************************************************
+-Author                   :     Karan Singh Bisht
+-Created/Modified Date    :     23-09-2020
+-Description              :     AppointmentModel class
+*******************************************************************************************************************************/
 
 public class AppointmentModel {
 
-private String userId;
-	
+	private UserEntity user;
 	
 	private BigInteger appointmentId;
 	
-	private String testId;
+	private DiagnosticTestEntity test;
+	
+	private DiagnosticCenterEntity center;
 	
 	@DateTimeFormat(pattern = "yyyy/MM/ddThh:mm")
 	private LocalDateTime dateTime;
@@ -21,28 +32,50 @@ private String userId;
 	private boolean approved = false;
 	
 	
+	
+	
+	public DiagnosticCenterEntity getCenter() {
+		return center;
+	}
+
+
+	public void setCenter(DiagnosticCenterEntity center) {
+		this.center = center;
+	}
+
+
 	public AppointmentModel() {
 		super();
 	}
 	
-	public String getUserId() {
-		return userId;
+	
+	public UserEntity getUser() {
+		return user;
 	}
-	public void setUserId(String userId) {
-		this.userId = userId;
+
+
+	public void setUser(UserEntity user) {
+		this.user = user;
 	}
+
+
 	public BigInteger getAppointmentId() {
 		return appointmentId;
 	}
 	public void setAppointmentId(BigInteger appointmentId) {
 		this.appointmentId = appointmentId;
 	}
-	public String getTestId() {
-		return testId;
+	
+	public DiagnosticTestEntity getTest() {
+		return test;
 	}
-	public void setTestId(String testId) {
-		this.testId = testId;
+
+
+	public void setTest(DiagnosticTestEntity test) {
+		this.test = test;
 	}
+
+
 	public LocalDateTime getDateTime() {
 		return dateTime;
 	}
@@ -56,24 +89,29 @@ private String userId;
 		this.approved = approved;
 	}
 
-	public AppointmentModel(String userId, BigInteger appointmentId, String testId, LocalDateTime dateTime,
-			boolean approved) {
+	
+	
+	public AppointmentModel(UserEntity user, BigInteger appointmentId, DiagnosticTestEntity test,
+			DiagnosticCenterEntity center, LocalDateTime dateTime, boolean approved) {
 		super();
-		this.userId = userId;
+		this.user = user;
 		this.appointmentId = appointmentId;
-		this.testId = testId;
+		this.test = test;
+		this.center = center;
 		this.dateTime = dateTime;
 		this.approved = approved;
 	}
-	
+
+
 	public static AppointmentEntity toEntity(AppointmentModel source) {
 		AppointmentEntity result = new AppointmentEntity();
 		if(source!=null) {
 			result.setAppointmentId(source.getAppointmentId());
 			result.setApproved(source.isApproved());
 			result.setDateTime(source.getDateTime());
-			result.setTestId(source.getTestId());
-			result.setUserId(source.getTestId());
+			result.setTest(source.getTest());
+			result.setUser(source.getUser());
+			result.setCenter(source.getCenter());
 		}
 		return result;
 	}
@@ -84,8 +122,9 @@ private String userId;
 			result.setAppointmentId(source.getAppointmentId());
 			result.setApproved(source.isApproved());
 			result.setDateTime(source.getDateTime());
-			result.setTestId(source.getTestId());
-			result.setUserId(source.getTestId());
+			result.setTest(source.getTest());
+			result.setUser(source.getUser());
+			result.setCenter(source.getCenter());
 		}
 		return result;
 	}

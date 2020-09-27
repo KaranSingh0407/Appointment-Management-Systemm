@@ -9,12 +9,19 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.cg.hcms.appointment.entities.AppointmentEntity;
+import com.cg.hcms.appointment.entity.AppointmentEntity;
 import com.cg.hcms.appointment.exception.AppointmentAlreadyApprovedException;
 import com.cg.hcms.appointment.exception.AppointmentNotFoundException;
 import com.cg.hcms.appointment.exception.SlotNotAvailableException;
 import com.cg.hcms.appointment.model.AppointmentModel;
 import com.cg.hcms.appointment.repository.AppointmentRepo;
+
+/*******************************************************************************************************************************
+-Author                   :     Karan Singh Bisht
+-Created/Modified Date    :     23-09-2020
+-Description              :     AppointmentService class for business logic
+*******************************************************************************************************************************/
+
 
 @Service
 public class AppointmentServiceImpl implements AppointmentService{
@@ -28,8 +35,8 @@ public class AppointmentServiceImpl implements AppointmentService{
 			result.setAppointmentId(source.getAppointmentId());
 			result.setApproved(source.isApproved());
 			result.setDateTime(source.getDateTime());
-			result.setTestId(source.getTestId());
-			result.setUserId(source.getTestId());
+			result.setTest(source.getTest());
+			result.setUser(source.getUser());
 		}
 		return result;
 	}
@@ -40,18 +47,18 @@ public class AppointmentServiceImpl implements AppointmentService{
 			result.setAppointmentId(source.getAppointmentId());
 			result.setApproved(source.isApproved());
 			result.setDateTime(source.getDateTime());
-			result.setTestId(source.getTestId());
-			result.setUserId(source.getTestId());
+			result.setTest(source.getTest());
+			result.setUser(source.getUser());
 		}
 		return result;
 	}
 
 	@Override
-	public AppointmentModel makeAppointment(AppointmentModel appointment) {
+	public AppointmentModel makeAppointment(AppointmentModel appointment) throws SlotNotAvailableException{
 		
 		LocalTime time=appointment.getDateTime().toLocalTime();
-
-		if ((appointmentRepo.getAppointmentByDateTimeAndTestId(appointment.getDateTime(), appointment.getTestId())!=null)
+		
+		if ((appointmentRepo.getAppointmentByDateTimeAndTest(appointment.getDateTime(), appointment.getTest())!=null)
 			||appointment.getDateTime().isBefore(LocalDateTime.now().plusHours(3))||
 			appointment.getDateTime().isAfter(LocalDateTime.now().plusDays(10))
 			||time.isBefore(LocalTime.of(7, 59))||time.isAfter(LocalTime.of(20, 00))) {
