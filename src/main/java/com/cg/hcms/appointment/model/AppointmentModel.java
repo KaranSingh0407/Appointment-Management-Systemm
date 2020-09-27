@@ -89,8 +89,8 @@ public class AppointmentModel {
 		this.approved = approved;
 	}
 
-	
-	
+
+
 	public AppointmentModel(UserEntity user, BigInteger appointmentId, DiagnosticTestEntity test,
 			DiagnosticCenterEntity center, LocalDateTime dateTime, boolean approved) {
 		super();
