@@ -19,7 +19,7 @@ import com.cg.hcms.appointment.service.AppointmentService;
 /*******************************************************************************************************************************
 -Author                   :     Karan Singh Bisht
 -Created/Modified Date    :     23-09-2020
--Description              :     AppointmentController Class for accessing Appointment Management System services
+-Description              :     AppointmentController Class for accessing services
 *******************************************************************************************************************************/
 
 @RestController

@@ -32,10 +32,8 @@ public class AppointmentEntity {
 	private UserEntity user;
 	
 	@ManyToOne(fetch = FetchType.LAZY, optional = false)
-	@JoinColumn(name = "centerId", nullable = false)
 	private DiagnosticCenterEntity center;
 
-	
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator="seq")
 	private BigInteger appointmentId;
@@ -46,9 +44,7 @@ public class AppointmentEntity {
 	@DateTimeFormat(pattern = "yyyy/MM/ddThh:mm")
 	private LocalDateTime dateTime;
 	private boolean approved = false;
-	
-	
-	
+			
 	
 	public DiagnosticCenterEntity getCenter() {
 		return center;
@@ -59,21 +55,17 @@ public class AppointmentEntity {
 		this.center = center;
 	}
 
-
 	public AppointmentEntity() {
 		super();
 	}
-	
-	
+		
 	public UserEntity getUser() {
 		return user;
 	}
 
-
 	public void setUser(UserEntity user) {
 		this.user = user;
 	}
-
 
 	public BigInteger getAppointmentId() {
 		return appointmentId;
@@ -88,14 +80,15 @@ public class AppointmentEntity {
 	public void setDateTime(LocalDateTime dateTime) {
 		this.dateTime = dateTime;
 	}
+	
 	public boolean isApproved() {
 		return approved;
 	}
+	
 	public void setApproved(boolean approved) {
 		this.approved = approved;
 	}
 	
-
 	public DiagnosticTestEntity getTest() {
 		return test;
 	}
@@ -105,7 +98,7 @@ public class AppointmentEntity {
 	}
 
 
-	public AppointmentEntity(UserEntity user, DiagnosticCenterEntity center, BigInteger appointmentId,
+	public AppointmentEntity(UserEntity user, DiagnosticCenterEntity center,BigInteger appointmentId,
 			DiagnosticTestEntity test, LocalDateTime dateTime, boolean approved) {
 		super();
 		this.user = user;

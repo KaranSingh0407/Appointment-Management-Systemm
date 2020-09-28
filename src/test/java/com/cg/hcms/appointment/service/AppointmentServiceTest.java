@@ -4,7 +4,6 @@ import static org.junit.Assert.assertThrows;
 
 import java.math.BigInteger;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.BeforeClass;
@@ -73,11 +72,9 @@ public class AppointmentServiceTest {
 	@BeforeEach
 	public void init() {
 		
-		
-		
 		appointment = new AppointmentModel(user1, BigInteger.valueOf(17), test1, center1, LocalDateTime.of(2020,9 , 27, 9, 30), false);
 		//appointmentSecond = new AppointmentModel(user1, BigInteger.valueOf(17), test2, center1, LocalDateTime.of(2020,9 , 28, 9, 30), false);
-		//appointmentThird = new AppointmentModel(user1, BigInteger.valueOf(16), test1, center1, LocalDateTime.of(2020,10 , 3, 9, 30), true);
+		appointmentThird = new AppointmentModel(user1, BigInteger.valueOf(16), test1, center1, LocalDateTime.of(2020,10 , 3, 9, 30), true);
 		appointment1=new AppointmentModel(user1, BigInteger.valueOf(25), test1, center1, LocalDateTime.of(2020, 10, 3, 5, 30), false);
 		appointment2=new AppointmentModel(user1, BigInteger.valueOf(26) , test1, center1, LocalDateTime.of(2020,10 , 15, 11, 30), false);
 		appointment3= new AppointmentModel(user1, BigInteger.valueOf(5) , test1, center1, LocalDateTime.now().plusHours(2), false);

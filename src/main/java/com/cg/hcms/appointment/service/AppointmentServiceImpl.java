@@ -19,7 +19,7 @@ import com.cg.hcms.appointment.repository.AppointmentRepo;
 /*******************************************************************************************************************************
 -Author                   :     Karan Singh Bisht
 -Created/Modified Date    :     23-09-2020
--Description              :     AppointmentService class for business logic
+-Description              :     AppointmentServiceImpl class for business logic implements AppointmentService
 *******************************************************************************************************************************/
 
 
@@ -29,6 +29,8 @@ public class AppointmentServiceImpl implements AppointmentService{
 	@Autowired
 	private AppointmentRepo appointmentRepo;
 	
+	
+	
 	private AppointmentEntity of(AppointmentModel source) {
 		AppointmentEntity result = new AppointmentEntity();
 		if(source!=null) {
@@ -37,6 +39,7 @@ public class AppointmentServiceImpl implements AppointmentService{
 			result.setDateTime(source.getDateTime());
 			result.setTest(source.getTest());
 			result.setUser(source.getUser());
+			result.setCenter(source.getCenter());
 		}
 		return result;
 	}
@@ -49,14 +52,26 @@ public class AppointmentServiceImpl implements AppointmentService{
 			result.setDateTime(source.getDateTime());
 			result.setTest(source.getTest());
 			result.setUser(source.getUser());
+			result.setCenter(source.getCenter());
 		}
 		return result;
 	}
+	
+	/*******************************************************************************************************************************
+	-Function Name            :     makeAppointment
+	-Input Parameters         :     AppointmentModel Object
+	-Return Type              :     appointmentModel object
+	-Throws                   :     SlotNotAvailableException
+	-Author                   :     Karan Singh Bisht
+	-Created/Modified Date    :     23-09-2020
+	-Description              :     adding appointment to the appointment database table 
+	*******************************************************************************************************************************/
 
 	@Override
 	public AppointmentModel makeAppointment(AppointmentModel appointment) throws SlotNotAvailableException{
 		
 		LocalTime time=appointment.getDateTime().toLocalTime();
+		
 		
 		if ((appointmentRepo.getAppointmentByDateTimeAndTest(appointment.getDateTime(), appointment.getTest())!=null)
 			||appointment.getDateTime().isBefore(LocalDateTime.now().plusHours(3))||
@@ -67,18 +82,39 @@ public class AppointmentServiceImpl implements AppointmentService{
 	
 		return toModel((appointmentRepo.save(of(appointment))));
 	}
+	
+	/*******************************************************************************************************************************
+	-Function Name            :     getAppointment
+	-Input Parameters         :     BigInteger appointmentId 
+	-Return Type              :     AppointmentModel Object
+	-Throws                   :     AppointmentNotFoundException
+	-Author                   :     Karan Singh Bisht
+	-Created/Modified Date    :     23-09-2020
+	-Description              :     getting appointment based on appointmentId from appointment database table
+	*******************************************************************************************************************************/
 
 	@Override
-	public AppointmentModel getAppointment(BigInteger appointmentId) {
+	public AppointmentModel getAppointment(BigInteger appointmentId) throws AppointmentNotFoundException{
 		
 		if (!appointmentRepo.existsById(appointmentId)) {
 			throw new AppointmentNotFoundException("Appointment with id " + appointmentId + "not found");
 		}
-		return toModel(appointmentRepo.getOne(appointmentId));
+		return toModel(appointmentRepo.findById(appointmentId).get());
 	}
-
+	
+	
+	
+	/*******************************************************************************************************************************
+	-Function Name            :     getAllAppointments
+	-Input Parameters         :     none
+	-Return Type              :     list of AppointmentModel
+	-Throws                   :     AppointmentNotFoundException
+	-Author                   :     Karan Singh Bisht
+	-Created/Modified Date    :     23-09-2020
+	-Description              :     getting all the appointments from the appointment database table 
+	*******************************************************************************************************************************/
 	@Override
-	public List<AppointmentModel> getAllAppointments() {
+	public List<AppointmentModel> getAllAppointments() throws AppointmentNotFoundException{
 		
 		if (appointmentRepo.findAll().isEmpty()) {
 			throw new AppointmentNotFoundException("Appointment list is empty");
@@ -86,21 +122,39 @@ public class AppointmentServiceImpl implements AppointmentService{
 		return appointmentRepo.findAll().stream().map((entity)->toModel(entity)).collect(Collectors.toList());
 		
 	}
-
+	
+	/*******************************************************************************************************************************
+	-Function Name            :     approveAppointment
+	-Input Parameters         :     AppointmentModel Object and status boolean variable
+	-Return Type              :     appointmentModel
+	-Throws                   :     AppointmentAlreadyApprovedException
+	-Author                   :     Karan Singh Bisht
+	-Created/Modified Date    :     23-09-2020
+	-Description              :     approves appointment and updates the appointment present in appointment database table
+	*******************************************************************************************************************************/
 	@Override
-	public AppointmentModel approveAppointment(AppointmentModel appointment, boolean status) {
+	public AppointmentModel approveAppointment(AppointmentModel appointment, boolean status) throws AppointmentAlreadyApprovedException{
 		if (appointment.isApproved()) {
 			throw new AppointmentAlreadyApprovedException(
 					"Appointment with Id :" + appointment.getAppointmentId() + " is Already Approved");
 		}
-
+		
 		appointment.setApproved(status);
 		return toModel(appointmentRepo.save(of(appointment)));
 		
 	}
-
+	
+	/*******************************************************************************************************************************
+	-Function Name            :     removeAppointmentById
+	-Input Parameters         :     BigInteger appointmentId  
+	-Return Type              :     boolean status
+	-Throws                   :     AppointmentAlreadyApprovedException
+	-Author                   :     Karan Singh Bisht
+	-Created/Modified Date    :     23-09-2020
+	-Description              :     deletes appointment that is stored under listOfAppointments in a Diagnostic center
+	*******************************************************************************************************************************/
 	@Override
-	public boolean removeAppointmentById(BigInteger appointmentId) {
+	public boolean removeAppointmentById(BigInteger appointmentId) throws AppointmentNotFoundException{
 		if(!appointmentRepo.existsById(appointmentId)) 
     		throw new AppointmentNotFoundException("Appointment with id: "+appointmentId+" not found");
 		

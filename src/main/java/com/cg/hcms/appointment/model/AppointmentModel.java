@@ -91,8 +91,8 @@ public class AppointmentModel {
 
 
 
-	public AppointmentModel(UserEntity user, BigInteger appointmentId, DiagnosticTestEntity test,
-			DiagnosticCenterEntity center, LocalDateTime dateTime, boolean approved) {
+	public AppointmentModel(UserEntity user, BigInteger appointmentId, DiagnosticTestEntity test, DiagnosticCenterEntity center,
+			 LocalDateTime dateTime, boolean approved) {
 		super();
 		this.user = user;
 		this.appointmentId = appointmentId;
